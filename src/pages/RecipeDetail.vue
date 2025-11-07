@@ -12,11 +12,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowLeftIcon } from "lucide-vue-next";
+import { ArrowLeftIcon, Heart } from "lucide-vue-next";
 import { Badge } from "@/components/ui/badge";
+import { useFavorites } from "@/composables/useFavorites";
 
 const route = useRoute();
 const recipeId = computed(() => Number(route.params.id));
+const { isFavorite, toggleFavorite } = useFavorites();
 
 const recipe = computed(() => {
   return recipes.find((r) => r.id === recipeId.value);
@@ -47,8 +49,28 @@ const hasSteps = computed(() => {
             class="w-[200px] object-cover aspect-square"
           />
         </div>
-        <div>
-          <h1 class="text-4xl font-bold mb-4">{{ recipe.name }}</h1>
+        <div class="flex-1">
+          <div class="flex items-start justify-between gap-4 mb-4">
+            <h1 class="text-4xl font-bold">{{ recipe.name }}</h1>
+            <Button
+              @click="toggleFavorite(recipe.id)"
+              variant="outline"
+              size="icon"
+              class="shrink-0"
+              :aria-label="
+                isFavorite(recipe.id)
+                  ? 'Remove from favorites'
+                  : 'Add to favorites'
+              "
+            >
+              <Heart
+                :class="
+                  isFavorite(recipe.id) ? 'fill-red-500 text-red-500' : ''
+                "
+                class="size-5"
+              />
+            </Button>
+          </div>
           <p class="text-lg text-muted-foreground">{{ recipe.description }}</p>
         </div>
       </div>
@@ -90,7 +112,7 @@ const hasSteps = computed(() => {
                 >
                   {{ step.id }}
                 </Badge>
-                <span class="flex-1 pt-0.5">{{ step.name }}</span>
+                <span class="flex-1">{{ step.name }}</span>
               </li>
             </ol>
           </CardContent>

@@ -1,10 +1,11 @@
 export const recipes = [
   {
     id: 1,
-    name: "Nasi Goreng",
+    name: "Magelangan Dewa Rendang Petir",
     description:
-      "A classic Indonesian fried rice dish cooked with sweet soy sauce, garlic, shallots, and chili, often served with a fried egg on top.",
+      "A traditional Indonesian fried rice dish cooked with sweet soy sauce, garlic, shallots, and chili, often served with a fried egg on top.",
     image: "https://images.pexels.com/photos/6294458/pexels-photo-6294458.jpeg",
+    category: "Yogyakartans",
     ingredients: [
       { id: 1, name: "2 cups cooked rice" },
       { id: 2, name: "2 tbsp sweet soy sauce (kecap manis)" },
@@ -31,6 +32,7 @@ export const recipes = [
       "Grilled chicken skewers marinated in spices and served with rich, creamy peanut sauce.",
     image:
       "https://images.pexels.com/photos/12842894/pexels-photo-12842894.jpeg",
+    category: "Indonesian",
     ingredients: [
       { id: 1, name: "500g chicken breast, diced" },
       { id: 2, name: "2 tbsp soy sauce" },
@@ -52,6 +54,7 @@ export const recipes = [
       "A rich and tender beef stew slow-cooked in coconut milk and aromatic spices, originating from West Sumatra.",
     image:
       "https://images.pexels.com/photos/12737656/pexels-photo-12737656.jpeg",
+    category: "Indonesian",
     ingredients: [
       { id: 1, name: "500g beef" },
       { id: 2, name: "400ml coconut milk" },
@@ -78,6 +81,7 @@ export const recipes = [
       "A healthy Indonesian salad made of blanched vegetables, tofu, and boiled eggs, served with peanut sauce.",
     image:
       "https://images.pexels.com/photos/19072469/pexels-photo-19072469.jpeg",
+    category: "Indonesian",
     ingredients: [
       { id: 1, name: "100g cabbage, blanched" },
       { id: 2, name: "100g bean sprouts" },
@@ -103,6 +107,7 @@ export const recipes = [
       "A popular Indonesian meatball soup made from beef, served in a flavorful broth with noodles and vegetables.",
     image:
       "https://images.pexels.com/photos/18891889/pexels-photo-18891889.jpeg",
+    category: "Indonesian",
     ingredients: [
       { id: 1, name: "300g ground beef" },
       { id: 2, name: "2 tbsp tapioca flour" },
@@ -129,6 +134,7 @@ export const recipes = [
       "A fragrant Indonesian chicken soup with turmeric, vermicelli noodles, and fresh herbs.",
     image:
       "https://images.pexels.com/photos/18926232/pexels-photo-18926232.jpeg",
+    category: "Indonesian",
     ingredients: [
       { id: 1, name: "500g chicken" },
       { id: 2, name: "1L chicken broth" },
@@ -155,6 +161,7 @@ export const recipes = [
       "Stir-fried noodles with vegetables, egg, and chicken or shrimp, seasoned with soy sauce and spices.",
     image:
       "https://images.pexels.com/photos/12842896/pexels-photo-12842896.jpeg",
+    category: "Indonesian",
     ingredients: [
       { id: 1, name: "200g egg noodles" },
       { id: 2, name: "2 tbsp soy sauce" },
@@ -181,6 +188,7 @@ export const recipes = [
       "A savory Indonesian fish cake from Palembang, served with sweet and sour vinegar sauce.",
     image:
       "https://images.pexels.com/photos/14394712/pexels-photo-14394712.jpeg",
+    category: "Indonesian",
     ingredients: [
       { id: 1, name: "300g fish fillet (mackerel)" },
       { id: 2, name: "100g tapioca flour" },
