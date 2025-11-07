@@ -6,7 +6,12 @@ const router = createRouter({
     {
       path: "/",
       name: "home",
-      component: () => import("@/App.vue"),
+      component: () => import("@/pages/Home.vue"),
+    },
+    {
+      path: "/recipe/:id",
+      name: "recipe-detail",
+      component: () => import("@/pages/RecipeDetail.vue"),
     },
   ],
 });

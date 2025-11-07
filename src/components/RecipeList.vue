@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { RouterLink } from "vue-router";
 import { recipes } from "@/constants/recipe";
 import {
   Card,
@@ -7,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
   CardFooter,
-} from "@/components/ui/card";
+} from "@/components/ui/recipe-card";
 import { Button } from "@/components/ui/button";
 // import { Badge } from "@/components/ui/badge";
 

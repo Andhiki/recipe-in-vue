@@ -1,14 +1,19 @@
 <script setup lang="ts">
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/recipe-card";
 
 defineProps<{
-  title?: string
+  title?: string;
   data: {
-    name: string
-    color: string
-    value: any
-  }[]
-}>()
+    name: string;
+    color: string;
+    value: any;
+  }[];
+}>();
 </script>
 
 <template>
