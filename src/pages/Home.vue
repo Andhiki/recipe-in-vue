@@ -7,6 +7,21 @@ import Navbar from "@/components/Navbar.vue";
 import RecipeList from "@/components/RecipeList.vue";
 import AddRecipeDialog from "@/components/AddRecipeDialog.vue";
 import { Button } from "@/components/ui/button";
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  CardFooter,
+} from "@/components/ui/recipe-card";
 import { useUserRecipes } from "@/composables/useUserRecipes";
 import { useFavorites } from "@/composables/useFavorites";
 
