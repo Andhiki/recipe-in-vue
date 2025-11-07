@@ -14,17 +14,22 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useFavorites } from "@/composables/useFavorites";
-// import { Badge } from "@/components/ui/badge";
+import { useUserRecipes } from "@/composables/useUserRecipes";
 
 const { isFavorite, toggleFavorite } = useFavorites();
+const { recipes: userRecipes } = useUserRecipes();
 
 const searchQuery = ref("");
 const selectedCategory = ref<string | null>(null);
 const showFavoritesOnly = ref(false);
 
+const allRecipes = computed(() => {
+  return [...userRecipes.value, ...recipes];
+});
+
 const categories = computed(() => {
   const uniqueCategories = new Set<string>();
-  recipes.forEach((recipe) => {
+  allRecipes.value.forEach((recipe) => {
     if (recipe.category) {
       uniqueCategories.add(recipe.category);
     }
@@ -33,7 +38,7 @@ const categories = computed(() => {
 });
 
 const filteredRecipes = computed(() => {
-  let filtered = recipes;
+  let filtered = allRecipes.value;
 
   if (showFavoritesOnly.value) {
     filtered = filtered.filter((recipe) => isFavorite(recipe.id));
@@ -157,7 +162,7 @@ const toggleCategory = (category: string) => {
         :key="recipe.id"
         class="overflow-hidden"
       >
-        <div class="relative h-48 overflow-hidden w-1/2">
+        <div class="relative h-48 overflow-hidden w-full max-w-1/2">
           <img
             :src="recipe.image"
             :alt="recipe.name"

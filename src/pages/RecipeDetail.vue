@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { useRoute, RouterLink } from "vue-router";
+import { useRoute, RouterLink, useRouter } from "vue-router";
 import { recipes } from "@/constants/recipe";
 import Container from "@/components/Container.vue";
 import Navbar from "@/components/Navbar.vue";
@@ -12,21 +12,41 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowLeftIcon, Heart } from "lucide-vue-next";
+import { ArrowLeftIcon, Heart, Trash2 } from "lucide-vue-next";
 import { Badge } from "@/components/ui/badge";
 import { useFavorites } from "@/composables/useFavorites";
+import { useUserRecipes } from "@/composables/useUserRecipes";
 
 const route = useRoute();
+const router = useRouter();
 const recipeId = computed(() => Number(route.params.id));
 const { isFavorite, toggleFavorite } = useFavorites();
+const {
+  getRecipe: getUserRecipe,
+  isUserRecipe,
+  deleteRecipe,
+} = useUserRecipes();
 
 const recipe = computed(() => {
+  // Check if it's a user recipe first
+  if (isUserRecipe(recipeId.value)) {
+    return getUserRecipe(recipeId.value);
+  }
+  // Otherwise, check default recipes
   return recipes.find((r) => r.id === recipeId.value);
 });
 
 const hasSteps = computed(() => {
   return recipe.value?.steps && recipe.value.steps.length > 0;
 });
+
+const handleDelete = () => {
+  if (recipe.value && isUserRecipe(recipe.value.id)) {
+    deleteRecipe(recipe.value.id);
+    // Navigate back to home after deletion
+    router.push("/");
+  }
+};
 </script>
 
 <template>
@@ -52,24 +72,35 @@ const hasSteps = computed(() => {
         <div class="flex-1">
           <div class="flex items-start justify-between gap-4 mb-4">
             <h1 class="text-4xl font-bold">{{ recipe.name }}</h1>
-            <Button
-              @click="toggleFavorite(recipe.id)"
-              variant="outline"
-              size="icon"
-              class="shrink-0"
-              :aria-label="
-                isFavorite(recipe.id)
-                  ? 'Remove from favorites'
-                  : 'Add to favorites'
-              "
-            >
-              <Heart
-                :class="
-                  isFavorite(recipe.id) ? 'fill-red-500 text-red-500' : ''
+            <div class="flex gap-2 shrink-0">
+              <Button
+                @click="toggleFavorite(recipe.id)"
+                variant="outline"
+                size="icon"
+                :aria-label="
+                  isFavorite(recipe.id)
+                    ? 'Remove from favorites'
+                    : 'Add to favorites'
                 "
-                class="size-5"
-              />
-            </Button>
+              >
+                <Heart
+                  :class="
+                    isFavorite(recipe.id) ? 'fill-red-500 text-red-500' : ''
+                  "
+                  class="size-5"
+                />
+              </Button>
+              <Button
+                v-if="isUserRecipe(recipe.id)"
+                @click="handleDelete"
+                variant="outline"
+                size="icon"
+                class="hover:text-destructive"
+                aria-label="Delete recipe"
+              >
+                <Trash2 class="size-5" />
+              </Button>
+            </div>
           </div>
           <p class="text-lg text-muted-foreground">{{ recipe.description }}</p>
         </div>
