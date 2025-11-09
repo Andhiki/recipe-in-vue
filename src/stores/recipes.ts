@@ -1,5 +1,5 @@
 import { recipesData } from "@/constants/recipes";
-import type { Recipe } from "@/types/recipe";
+import type { Ingredient, Recipe, Step } from "@/types/recipe";
 import { defineStore } from "pinia";
 
 const STORAGE_KEY = "recipe-favorites";
@@ -49,8 +49,10 @@ export const useRecipesStore = defineStore("recipes", {
             r.name.toLowerCase().includes(query) ||
             r.description.toLowerCase().includes(query) ||
             r.category.toLowerCase().includes(query) ||
-            r.ingredients.some((i) => i.name.toLowerCase().includes(query)) ||
-            r.steps.some((s) => s.name.toLowerCase().includes(query))
+            r.ingredients.some((i: Ingredient) =>
+              i.name.toLowerCase().includes(query)
+            ) ||
+            r.steps.some((s: Step) => s.name.toLowerCase().includes(query))
         );
       }
 

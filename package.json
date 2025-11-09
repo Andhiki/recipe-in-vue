@@ -6,11 +6,15 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
+    "build:tsgo": "tsgo --project tsconfig.app.json && vite build",
+    "type-check": "vue-tsc --noEmit",
+    "type-check:tsgo": "tsgo --noEmit --project tsconfig.app.json",
     "preview": "vite preview"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.16",
     "@tanstack/vue-table": "^8.21.3",
+    "@typescript/native-preview": "^7.0.0-dev.20251108.1",
     "@unovis/ts": "^1.6.1",
     "@unovis/vue": "^1.6.1",
     "@vee-validate/zod": "^4.15.1",
