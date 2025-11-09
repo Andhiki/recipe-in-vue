@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useRoute, RouterLink, useRouter } from "vue-router";
-import { recipes } from "@/constants/recipe";
 import Container from "@/components/Container.vue";
 import Navbar from "@/components/Navbar.vue";
 import {
@@ -16,6 +15,7 @@ import { ArrowLeftIcon, Heart, Trash2 } from "lucide-vue-next";
 import { Badge } from "@/components/ui/badge";
 import { useFavorites } from "@/composables/useFavorites";
 import { useUserRecipes } from "@/composables/useUserRecipes";
+import { useRecipesStore } from "@/stores/recipes";
 
 const route = useRoute();
 const router = useRouter();
@@ -26,14 +26,10 @@ const {
   isUserRecipe,
   deleteRecipe,
 } = useUserRecipes();
+const recipesStore = useRecipesStore();
 
 const recipe = computed(() => {
-  // Check if it's a user recipe first
-  if (isUserRecipe(recipeId.value)) {
-    return getUserRecipe(recipeId.value);
-  }
-  // Otherwise, check default recipes
-  return recipes.find((r) => r.id === recipeId.value);
+  return recipesStore.getRecipe(recipeId.value, getUserRecipe, isUserRecipe);
 });
 
 const hasSteps = computed(() => {
@@ -43,7 +39,6 @@ const hasSteps = computed(() => {
 const handleDelete = () => {
   if (recipe.value && isUserRecipe(recipe.value.id)) {
     deleteRecipe(recipe.value.id);
-    // Navigate back to home after deletion
     router.push("/");
   }
 };

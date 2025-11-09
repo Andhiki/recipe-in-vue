@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, watch } from "vue";
 import { RouterLink } from "vue-router";
 import { Search, Heart } from "lucide-vue-next";
-import { recipes } from "@/constants/recipe";
 import {
   Card,
   // CardContent,
@@ -15,84 +14,52 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useFavorites } from "@/composables/useFavorites";
 import { useUserRecipes } from "@/composables/useUserRecipes";
+import { useRecipesStore } from "@/stores/recipes";
 
-const { isFavorite, toggleFavorite } = useFavorites();
+const { isFavorite, toggleFavorite, favorites } = useFavorites();
 const { recipes: userRecipes } = useUserRecipes();
+const recipesStore = useRecipesStore();
 
-const searchQuery = ref("");
-const selectedCategory = ref<string | null>(null);
-const showFavoritesOnly = ref(false);
+watch(
+  userRecipes,
+  (recipes) => {
+    recipesStore.setUserRecipes(recipes);
+  },
+  { immediate: true }
+);
 
-const allRecipes = computed(() => {
-  return [...userRecipes.value, ...recipes];
+watch(
+  favorites,
+  (ids) => {
+    recipesStore.setFavoriteIds(ids);
+  },
+  { immediate: true }
+);
+
+const searchQuery = computed({
+  get: () => recipesStore.searchQuery,
+  set: (value: string) => recipesStore.setSearchQuery(value),
 });
 
-const categories = computed(() => {
-  const uniqueCategories = new Set<string>();
-  allRecipes.value.forEach((recipe) => {
-    if (recipe.category) {
-      uniqueCategories.add(recipe.category);
-    }
-  });
-  return Array.from(uniqueCategories).sort();
+const selectedCategory = computed({
+  get: () => recipesStore.selectedCategory,
+  set: (value: string | null) => recipesStore.setCategory(value),
 });
 
-const filteredRecipes = computed(() => {
-  let filtered = allRecipes.value;
-
-  if (showFavoritesOnly.value) {
-    filtered = filtered.filter((recipe) => isFavorite(recipe.id));
-  }
-
-  if (selectedCategory.value) {
-    filtered = filtered.filter(
-      (recipe) => recipe.category === selectedCategory.value
-    );
-  }
-
-  if (searchQuery.value.trim()) {
-    const query = searchQuery.value.toLowerCase().trim();
-
-    filtered = filtered.filter((recipe) => {
-      if (recipe.name.toLowerCase().includes(query)) {
-        return true;
-      }
-
-      if (recipe.description.toLowerCase().includes(query)) {
-        return true;
-      }
-
-      if (recipe.category.toLowerCase().includes(query)) {
-        return true;
-      }
-
-      if (
-        recipe.ingredients.some((ingredient) =>
-          ingredient.name.toLowerCase().includes(query)
-        )
-      ) {
-        return true;
-      }
-
-      if (
-        recipe.steps.some((step) => step.name.toLowerCase().includes(query))
-      ) {
-        return true;
-      }
-
-      return false;
-    });
-  }
-
-  return filtered;
+const showFavoritesOnly = computed({
+  get: () => recipesStore.showFavoritesOnly,
+  set: () => recipesStore.toggleFavoritesOnly(),
 });
+
+const categories = computed(() => recipesStore.categories);
+const filteredRecipes = computed(() => recipesStore.filteredRecipes);
 
 const toggleCategory = (category: string) => {
-  if (selectedCategory.value === category) {
-    selectedCategory.value = null;
-  } else {
-    selectedCategory.value = category;
-  }
+  recipesStore.toggleCategory(category);
+};
+
+const resetFilters = () => {
+  recipesStore.resetFilters();
 };
 </script>
 
@@ -111,10 +78,7 @@ const toggleCategory = (category: string) => {
 
     <div class="flex flex-wrap gap-2">
       <Button
-        @click="
-          selectedCategory = null;
-          showFavoritesOnly = false;
-        "
+        @click="resetFilters"
         :variant="
           selectedCategory === null && !showFavoritesOnly
             ? 'default'
@@ -125,7 +89,7 @@ const toggleCategory = (category: string) => {
         All
       </Button>
       <Button
-        @click="showFavoritesOnly = !showFavoritesOnly"
+        @click="recipesStore.toggleFavoritesOnly()"
         :variant="showFavoritesOnly ? 'default' : 'outline'"
         size="sm"
         class="gap-2"
@@ -139,10 +103,7 @@ const toggleCategory = (category: string) => {
       <Button
         v-for="category in categories"
         :key="category"
-        @click="
-          toggleCategory(category);
-          showFavoritesOnly = false;
-        "
+        @click="toggleCategory(category)"
         :variant="selectedCategory === category ? 'default' : 'outline'"
         size="sm"
       >

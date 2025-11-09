@@ -1,4 +1,6 @@
-export const recipes = [
+import type { Recipe } from "@/types/recipe";
+
+export const recipesData: Recipe[] = [
   {
     id: 1,
     name: "Magelangan Dewa Rendang Petir",
