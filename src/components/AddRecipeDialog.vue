@@ -13,7 +13,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Plus, X } from "lucide-vue-next";
-import { useUserRecipes } from "@/composables/useUserRecipes";
+import { useRecipes } from "@/composables/useRecipes";
 import type { Ingredient, Step } from "@/types/recipe";
 
 const props = defineProps<{
@@ -25,7 +25,7 @@ const emits = defineEmits<{
   (e: "recipe-added"): void;
 }>();
 
-const { addRecipe } = useUserRecipes();
+const { addRecipe } = useRecipes();
 
 const formData = ref({
   name: "",
@@ -113,7 +113,6 @@ const handleSubmit = () => {
     return;
   }
 
-  // Use placeholder image if none provided
   const imageUrl = formData.value.image.trim() || "/placeholder.jpg";
 
   addRecipe({

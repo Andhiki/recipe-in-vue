@@ -14,23 +14,14 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeftIcon, Heart, Trash2 } from "lucide-vue-next";
 import { Badge } from "@/components/ui/badge";
 import { useFavorites } from "@/composables/useFavorites";
-import { useUserRecipes } from "@/composables/useUserRecipes";
-import { useRecipesStore } from "@/stores/recipes";
-
+import { useRecipes } from "@/composables/useRecipes";
 const route = useRoute();
 const router = useRouter();
 const recipeId = computed(() => Number(route.params.id));
 const { isFavorite, toggleFavorite } = useFavorites();
-const {
-  getRecipe: getUserRecipe,
-  isUserRecipe,
-  deleteRecipe,
-} = useUserRecipes();
-const recipesStore = useRecipesStore();
+const { getRecipe, isUserRecipe, deleteRecipe } = useRecipes();
 
-const recipe = computed(() => {
-  return recipesStore.getRecipe(recipeId.value, getUserRecipe, isUserRecipe);
-});
+const recipe = computed(() => getRecipe(recipeId.value));
 
 const hasSteps = computed(() => {
   return recipe.value?.steps && recipe.value.steps.length > 0;

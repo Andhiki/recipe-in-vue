@@ -1,10 +1,8 @@
 <script setup lang="ts">
-import { computed, watch } from "vue";
 import { RouterLink } from "vue-router";
 import { Search, Heart } from "lucide-vue-next";
 import {
   Card,
-  // CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
@@ -13,54 +11,18 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useFavorites } from "@/composables/useFavorites";
-import { useUserRecipes } from "@/composables/useUserRecipes";
-import { useRecipesStore } from "@/stores/recipes";
+import { useRecipes } from "@/composables/useRecipes";
 
-const { isFavorite, toggleFavorite, favorites } = useFavorites();
-const { recipes: userRecipes } = useUserRecipes();
-const recipesStore = useRecipesStore();
-
-watch(
-  userRecipes,
-  (recipes) => {
-    recipesStore.setUserRecipes(recipes);
-  },
-  { immediate: true }
-);
-
-watch(
-  favorites,
-  (ids) => {
-    recipesStore.setFavoriteIds(ids);
-  },
-  { immediate: true }
-);
-
-const searchQuery = computed({
-  get: () => recipesStore.searchQuery,
-  set: (value: string) => recipesStore.setSearchQuery(value),
-});
-
-const selectedCategory = computed({
-  get: () => recipesStore.selectedCategory,
-  set: (value: string | null) => recipesStore.setCategory(value),
-});
-
-const showFavoritesOnly = computed({
-  get: () => recipesStore.showFavoritesOnly,
-  set: () => recipesStore.toggleFavoritesOnly(),
-});
-
-const categories = computed(() => recipesStore.categories);
-const filteredRecipes = computed(() => recipesStore.filteredRecipes);
-
-const toggleCategory = (category: string) => {
-  recipesStore.toggleCategory(category);
-};
-
-const resetFilters = () => {
-  recipesStore.resetFilters();
-};
+const { isFavorite, toggleFavorite } = useFavorites();
+const {
+  searchQuery,
+  selectedCategory,
+  showFavoritesOnly,
+  categories,
+  filteredRecipes,
+  toggleCategory,
+  resetFilters,
+} = useRecipes();
 </script>
 
 <template>
@@ -89,7 +51,7 @@ const resetFilters = () => {
         All
       </Button>
       <Button
-        @click="recipesStore.toggleFavoritesOnly()"
+        @click="showFavoritesOnly = !showFavoritesOnly"
         :variant="showFavoritesOnly ? 'default' : 'outline'"
         size="sm"
         class="gap-2"

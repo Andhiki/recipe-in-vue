@@ -22,16 +22,14 @@ import {
   CardTitle,
   CardFooter,
 } from "@/components/ui/recipe-card";
-import { useUserRecipes } from "@/composables/useUserRecipes";
+import { useRecipes } from "@/composables/useRecipes";
 import { useFavorites } from "@/composables/useFavorites";
 
-const { recipes: userRecipes, deleteRecipe } = useUserRecipes();
+const { userRecipes, deleteRecipe } = useRecipes();
 const { isFavorite, toggleFavorite } = useFavorites();
 const dialogOpen = ref(false);
 
-const handleRecipeAdded = () => {
-  // Dialog will close automatically
-};
+const handleRecipeAdded = () => {};
 </script>
 
 <template>
@@ -115,7 +113,7 @@ const handleRecipeAdded = () => {
 
     <div class="mt-8">
       <div class="flex items-center justify-between mb-4">
-        <h2 class="text-2xl font-bold">Other recipes</h2>
+        <h2 class="text-2xl font-bold">All recipes</h2>
         <Button @click="dialogOpen = true" variant="outline">
           Add Your Recipe
         </Button>
